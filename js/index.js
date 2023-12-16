@@ -366,7 +366,7 @@ function setValueCreatedAt(input) {
 
 function setUpPickerJS() {
   const dateEl = document.getElementById('start')
-  flatpickr(dateEl, { dateFormat: 'd/m/Y H:i', enableTime: true, disableMobile:true })
+  flatpickr(dateEl, { dateFormat: 'd/m/Y H:i', enableTime: true })
 }
 
 function addToggleShowFilterListener() {

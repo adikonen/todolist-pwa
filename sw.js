@@ -1,4 +1,4 @@
-const STATIC_CACHE_KEY = 'static.file-v2';
+const STATIC_CACHE_KEY = 'static.file-v4';
 
 async function deleteCache(key) {
   await caches.delete(key);
