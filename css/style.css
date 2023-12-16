@@ -189,7 +189,6 @@ main {
   display: flex;
   flex-direction: column;
   gap:0.5em;
-  margin: 1rem 0;
 }
 
 .todo-list-wrapper {
@@ -250,6 +249,31 @@ main {
 .todo-action__btn {
   display: flex;
   align-items: center;
+}
+
+.todo-filter {
+  padding:0.4em;
+  box-shadow: 1px 1px 2px 1px gray;
+  margin: 1em 0;
+}
+
+.todo-filter__title {
+  margin-bottom: 0.4em;
+}
+
+.todo-filter__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo-filter__checkbox-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+.todo-filter__checkbox {
+  margin-right: 0.4em;
 }
 
 .cool-effect {

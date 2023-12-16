@@ -12,14 +12,27 @@ const OVERTIME_TODOLIST_KEY = 'overtime.todolist'
 
 const TODO_CREATED_EVENT = 'todo-created'
 const TODO_DELETED_EVENT = 'todo-deleted'
-const TODO_STATUS_CHANGED = 'todo-set-done'
+const TODO_STATUS_CHANGED_EVENT = 'todo-set-done'
+
+const STATE_CHECKED_FILTER_EVENT = 'state.checked-filter'
 
 const FORM_ID_SELECTOR = 'create-form'
 const WRAPPER_ID_SELECTOR = 'todo-list-wrapper'
 const OVERTIME_TODO_ID_SELECTOR = 'overtime-list'
 
+const FILTER_ID_SELECTOR = 'filter'
+
 const overtimeModal = new Modal()
 overtimeModal.setTitle('Upps Beberapa Todo Terlewat')
+
+
+const state = {
+  checkedFilter: new Map([
+    ['pending',true],
+    ['done', false],
+    ['overtime', false],
+  ])
+}
 
 function setPendingToOvertimeTodo() {
   const json = localStorage.getItem(TODOLIST_KEY)
@@ -79,14 +92,15 @@ function getTodoList() {
   return todolist
 }
 
-function showTodoList(filterStatus = null, search = null) {
-  let todolist = getTodoList()
-
-  console.log(todolist)
-  if (filterStatus != null) {
-    todolist = todolist.filter((todo) => todo.status === filterStatus)
-  }
-
+/**
+ * 
+ * @param {string[]} filterStatuses 
+ */
+function showTodoList() {
+  let todolist = getTodoList().filter((todo) => {
+    return state.checkedFilter.get(todo.status) === true
+  })
+  
   const todolistWrapper = document.getElementById(WRAPPER_ID_SELECTOR)
 
   // rerender
@@ -96,6 +110,11 @@ function showTodoList(filterStatus = null, search = null) {
     const todolist = makeTodoElement(todo)
     todolistWrapper.appendChild(todolist)
   })
+
+  if (todolist == null || todolist.length == 0) {
+    todolistWrapper.innerHTML = '<h4 class="title">Belum ada todo dibuat</h4>'
+  }
+
 }
 
 /** 
@@ -204,7 +223,7 @@ function setDoneStatus(todo) {
   todo.status = 'done'
   updateTodoInMainStorage(todo)
   updateTodoInOvertimeStorage(todo)
-  document.dispatchEvent(new CustomEvent(TODO_STATUS_CHANGED, { detail: todo }))
+  document.dispatchEvent(new CustomEvent(TODO_STATUS_CHANGED_EVENT, { detail: todo }))
 }
 
 function addNewTodoElement(newTodo) {
@@ -247,12 +266,7 @@ function deleteTodoFromStorage(storageKey, todo) {
   const index = getIndexOfTodoFromStorage(todo, storageKey)
   const json = localStorage.getItem(storageKey)
   const todos = safeParseJson(json, [])
-  
-  // const index = todos.findIndex((item) => {
-  //   console.log(item.created_at, todo.created_at, item.created_at == todo.created_at)
-  //   return item.created_at == todo.created_at
-  // })
-  // console.log(todos[0].created_at, todo.created_at)
+ 
   if (index === -1) {
     return null
   }
@@ -311,13 +325,7 @@ function addTodoCreatedLisener() {
 function addTodoDeletedListener() {
   document.addEventListener(TODO_DELETED_EVENT, () => {
     showTodoList()
-
-    // const json = localStorage.getItem(OVERTIME_TODOLIST_KEY)
-    // const todos = safeParseJson(json, [])
-    // if they delete todo in overtime modal
     const overtimeTodos = setOvertimeList(overtimeModal)
-    // overtimeModal.setBody(overtimeTodos)
-
     if (overtimeTodos.firstChild == null) {
       overtimeModal.hideModal()
     }
@@ -325,7 +333,7 @@ function addTodoDeletedListener() {
 }
 
 function addTodoStatusChanged() {
-  document.addEventListener(TODO_STATUS_CHANGED, () => {
+  document.addEventListener(TODO_STATUS_CHANGED_EVENT, () => {
     showTodoList() 
     setOvertimeList(overtimeModal)
   })
@@ -351,7 +359,6 @@ function addHiddenCreatedAtInput() {
   document.getElementById(FORM_ID_SELECTOR).appendChild(input)
 }
 
-
 function setValueCreatedAt(input) {
   input.value = (new Date()).toLocaleString()
   return input
@@ -360,6 +367,46 @@ function setValueCreatedAt(input) {
 function setUpPickerJS() {
   const dateEl = document.getElementById('start')
   flatpickr(dateEl, { dateFormat: 'd/m/Y H:i', enableTime: true, disableMobile:true })
+}
+
+function addToggleShowFilterListener() {
+  const fheader = document.getElementById('filter-header')
+  const fbody = document.getElementById('filter-body')
+  let show = true
+
+  fheader.addEventListener('click', () => {
+    show = !show
+    if (show) {
+      fbody.classList.remove('d-none')
+    } else {
+      fbody.classList.add('d-none')
+    }
+  })
+}
+
+function addCheckboxFilterListener() {
+  const filter = document.getElementById(FILTER_ID_SELECTOR)
+  /**
+   * @type {NodeListOf<HTMLInputElement>}
+   */
+  const checkboxs = filter.querySelectorAll('input[type="checkbox"]')
+  checkboxs.forEach((box) => {
+    box.addEventListener('click', (e) => {
+      if (box.checked) {
+        state.checkedFilter.set(e.target.value, true)
+        document.dispatchEvent((new CustomEvent(STATE_CHECKED_FILTER_EVENT)))
+      } else {
+        state.checkedFilter.set(e.target.value, false)
+        document.dispatchEvent((new CustomEvent(STATE_CHECKED_FILTER_EVENT)))
+      }
+    })
+  })
+}
+
+function listenCheckedFilterMutation() {
+  document.addEventListener(STATE_CHECKED_FILTER_EVENT, () => {
+    showTodoList()
+  })
 }
 
 function setUpInputs() {
@@ -374,6 +421,10 @@ function main() {
   addTodoCreatedLisener()
   addTodoDeletedListener()
   addTodoStatusChanged()
+  addToggleShowFilterListener()
+
+  addCheckboxFilterListener()
+  listenCheckedFilterMutation()
   showTodoList()
 
   useClickInstall(document.getElementById('install-pwa'))

@@ -60,9 +60,24 @@
         <label for="consequences" class="form-label">(Opsional) Konsekuensi</label>
         <input type="text" id="consequences" class="form-input" name="consequences" placeholder="Jika tidak dilakukan maka harus">
       </div>
-      
       <button class="btn btn-primary">Buat Todo</button>
-    </form>
+    </form> 
+    <div class="todo-filter" id="filter">
+      <div class="todo-filter__header" id="filter-header">
+        <h4 class="todo-filter__title">Filter Todo</h4>
+      </div>
+      <div class="todo-filter__checkbox-wrapper" id="filter-body">
+        <div>
+          <input type="checkbox" id="pending" value="pending" name="todo-status" class="todo-filter__checkbox" checked><label for="pending">Pending</label>
+        </div>
+        <div>
+          <input type="checkbox" id="done" value="done" name="todo-status" class="todo-filter__checkbox"><label for="done">Done</label>
+        </div>
+        <div>
+          <input type="checkbox" id="overtime" value="overtime" name="todo-status"  class="todo-filter__checkbox"><label for="overtime">Overtime</label>
+        </div>
+      </div>
+    </div>
     <ul id="todo-list-wrapper" class="todo-list-wrapper">
       <!-- js render -->
     </ul>
