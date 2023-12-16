@@ -1,0 +1,15 @@
+{
+  "name": "Todolist Mantap",
+  "description": "Aplikasi Todolist PWA ",
+  "start_url": "/",
+  "lang": "en-US",
+  "theme_color": "#b3c6ff",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/images/main.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

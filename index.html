@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz@6..12&family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Todolist Mantap">
+  <meta name="apple-mobile-web-app-title" content="Todolist Mantap">
+  <meta name="theme-color" content="#b3c6ff">
+  <meta name="msapplication-navbutton-color" content="#b3c6ff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="msapplication-starturl" content="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="icon" type="image/png" sizes="512x512" href="/images/main.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="/images/main.png">
+  <title>Todo List Mantap</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+  <div class="modal-wrapper d-none" id="modal-wrapper">
+    <div class="modal-container">
+      <div class="modal" id="modal">
+        <h4 class="modal__title" id="modal-title"></h4>
+        <div class="modal__body" id="modal-body"></div>
+      </div>
+    </div>
+  </div>
+  <main>
+    <h1 class="title">Todo List Mantap </h1>
+    <div class="information">
+      <strong class="information__title">Perlu Diketahui</strong>
+      <span class="information__close"></span>
+      <ul class="information__list-group">
+        <li class="information__list">Data kamu hanya disimpan di browser.</li>
+        <li class="information__list">Pembuat tidak dapat melihat apapun yang Kamu simpan.</li>
+        <li class="information__list">
+          Web ini bisa berjalan offline. Atau dapat 
+          <a href="#" id="install-pwa">Diinstall</a>
+        </li>
+      </ul>
+    </div>
+    <form class="todo-form" id="create-form">
+      <div class="todo-input">
+        <label for="title" class="form-label">Todo Kamu</label>
+        <input type="text" id="title" class="form-input" name="title" placeholder="contoh: Belanja ke Warung" required>
+      </div>
+      <div class="todo-input">
+        <label for="start" class="form-label">Dimulai Saat</label>
+        <input type="text" id="start" class="form-input" name="start" required>
+      </div>
+      <div class="todo-input">
+        <label for="consequences" class="form-label">(Opsional) Konsekuensi</label>
+        <input type="text" id="consequences" class="form-input" name="consequences" placeholder="Jika tidak dilakukan maka harus">
+      </div>
+      
+      <button class="btn btn-primary">Buat Todo</button>
+    </form>
+    <ul id="todo-list-wrapper" class="todo-list-wrapper">
+      <!-- js render -->
+    </ul>
+  </main>
+  <script type="module" src="./js/app.js"></script>
+  <script type="module" src="./js/index.js"></script>
+</body>
+</html> 
